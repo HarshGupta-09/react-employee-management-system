@@ -1,14 +1,19 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import "./App.css";
 import Employees from "./components/Employees";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import EmployeePopup from "./components/employeePopup/EmployeePopup";
 import DeletePopup from "./components/deletePopup/DeletePopup";
+import { getEmployees } from "./store/features/employee/employeeThunk";
+import { useEffect } from "react";
 
 function App() {
-  const state = useSelector(state => state.popup)
-  console.log(state)
+  const dispatch = useDispatch();
+useEffect(()=>{
+  dispatch(getEmployees())
+},[])
+
   return (
     <>
       <div className="flex flex-col w-full min-h-screen">

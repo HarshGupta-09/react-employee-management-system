@@ -5,8 +5,16 @@ import api from "../../../config/axiosInstance";
 
 export const getEmployees = createAsyncThunk(
     'employee/getEmployees',
-    async ()=>{
-        const res = api.get('employee')
-        console.log(res)
+    async (_,{rejectWithValue})=>{
+        try {
+            const res = await  api.get('employee')
+            console.log(res)
+      
+        return res.data;
+        } catch (error) {
+            return rejectWithValue("Something Went Wrong")
+        }
+        
+
     }
 )
