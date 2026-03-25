@@ -28,9 +28,9 @@ const EmployeePopup = () => {
       }))
     }else{
        await dispatch(postEmployees(formDetails));
-    dispatch(closeEmployeePopup());
+    
     }
-   
+   dispatch(closeEmployeePopup());
   };
  
   useEffect(()=>{
@@ -88,6 +88,7 @@ const EmployeePopup = () => {
 
         <label className="label">Name</label>
         <input
+        required
         value={formDetails.name} 
           onChange={handleInputChange}
           name="name"
@@ -98,6 +99,7 @@ const EmployeePopup = () => {
 
         <label className="label">Email</label>
         <input
+
         value={formDetails.email} 
           onChange={handleInputChange}
           name="email"
@@ -108,6 +110,7 @@ const EmployeePopup = () => {
 
         <label className="label">Description</label>
         <textarea
+        required
         value={formDetails.bio} 
           onChange={handleInputChange}
           name="bio"

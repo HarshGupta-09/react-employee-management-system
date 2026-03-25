@@ -4,12 +4,14 @@ import { CiEdit } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
 import { useDispatch, useSelector } from 'react-redux';
 import { openDeletePopup, openEmployeePopup } from '../store/features/popup/popupSlice';
+import { updateEmployees } from '../store/features/employee/employeeThunk';
 const Employees = () => {
   const employeeDetails = useSelector(state => state.employee.employees)
   console.log(employeeDetails)
   return (
     <Layout>
         <ul className="list bg-base-100 rounded-box shadow-md">
+          {employeeDetails.length <1 ? <p>No Employees</p> : null}
           {employeeDetails.map((details,idx)=>{
             return <EmployeeCard details = {details} key={idx} />
           })}
@@ -23,6 +25,15 @@ const Employees = () => {
 }
 const EmployeeCard = ({details}) =>{
     const dispatch = useDispatch();
+    const handleHighlight = (details)=>{
+      console.log("chal rha ha")
+      dispatch(updateEmployees({
+        id : details.id,
+        details : {
+          ...details,highlight : !details.highlight
+        }
+      }))
+}
     return (
           
   <li className="list-row">
@@ -44,8 +55,10 @@ dispatch(openDeletePopup(details.id))
     }} className="btn btn-square btn-ghost">
       <MdDelete className='text-xl'/>
     </button>
-    <button className="btn btn-square btn-ghost">
-      <svg className="size-[1.2em]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2" fill="none" stroke="currentColor"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></g></svg>
+    <button onClick={()=>{
+      handleHighlight(details);
+    }} className="btn btn-square btn-ghost">
+      <svg className="size-[1.2em]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2" fill={details.highlight ?'red':'none' } stroke="currentColor"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></g></svg>
     </button>
   </li>
     )
