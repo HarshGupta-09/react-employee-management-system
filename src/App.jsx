@@ -3,6 +3,8 @@ import "./App.css";
 import Employees from "./components/Employees";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
+import EmployeePopup from "./components/employeePopup/EmployeePopup";
+import DeletePopup from "./components/deletePopup/DeletePopup";
 
 function App() {
   const state = useSelector(state => state.popup)
@@ -10,6 +12,8 @@ function App() {
   return (
     <>
       <div className="flex flex-col w-full min-h-screen">
+           <EmployeePopup/> 
+           <DeletePopup/>
         <Navbar />
         <div className="flex-1 py-10">
           <Employees/>
