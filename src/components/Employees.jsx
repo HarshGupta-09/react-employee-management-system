@@ -2,6 +2,8 @@ import React from 'react'
 import Layout from './Layout'
 import { CiEdit } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
+import { useDispatch } from 'react-redux';
+import { openDeletePopup, openEmployeePopup } from '../store/features/popup/popupSlice';
 const Employees = () => {
   return (
     <Layout>
@@ -42,6 +44,7 @@ const Employees = () => {
   )
 }
 const EmployeeCard = () =>{
+    const dispatch = useDispatch();
     return (
           
   <li className="list-row">
@@ -53,10 +56,14 @@ const EmployeeCard = () =>{
     <p className="list-col-wrap text-xs">
       "Remaining Reason" became an instant hit, praised for its haunting sound and emotional depth. A viral performance brought it widespread recognition, making it one of Dio Lupa’s most iconic tracks.
     </p>
-    <button className="btn btn-square btn-ghost">
+    <button onClick={()=>{
+      dispatch(openEmployeePopup())
+    }} className="btn btn-square btn-ghost">
       <CiEdit className='text-xl'/>
     </button>
-    <button className="btn btn-square btn-ghost">
+    <button onClick={()=>{
+dispatch(openDeletePopup())
+    }} className="btn btn-square btn-ghost">
       <MdDelete className='text-xl'/>
     </button>
     <button className="btn btn-square btn-ghost">
