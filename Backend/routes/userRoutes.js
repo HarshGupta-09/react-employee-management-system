@@ -12,8 +12,14 @@ const signupSchema = z.object({
   name: z.string().min(3),
 });
 
+const signinSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
+});
+
 userRouter.post("/signup", async (req, res) => {
-  const result = signupSchema.safeParse(req.body);
+    try {
+         const result = signupSchema.safeParse(req.body);
 
   if (!result.success) {
     return res.status(400).json({
@@ -43,37 +49,70 @@ userRouter.post("/signup", async (req, res) => {
     password: hashedPassword,
   });
 
-  res.json({
+  res.status(201).json({
     message: "Signup successful",
   });
+        
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+      message: "Server error",
+    });
+        
+    }
+ 
 });
 
 
-userRouter.post("/signin",async(req,res)=>{
-    const { email , password } = req.body;
-    const user = await userModel.findOne({email})
-    if(!user){
-        return res.status(404).json({
-            message : "User with this email not found"
-        })
+
+userRouter.post("/signin", async (req, res) => {
+  try {
+    const result = signinSchema.safeParse(req.body);
+
+    if (!result.success) {
+      return res.status(400).json({
+        message: "Invalid input",
+      });
     }
-    const isMatch = await bcrypt.compare(password,user.password);
-    if(!isMatch){
-        return res.status(401).json({
-            message : "invalid password"
-        })
+
+    const { email, password } = result.data;
+
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+      return res.status(401).json({
+        message: "Invalid email or password",
+      });
     }
-    const token = jwt.sign({
-        id : user._id.toString(),
-        
-    },process.env.JWT_SecretKey);
+
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      return res.status(401).json({
+        message: "Invalid email or password",
+      });
+    }
+
+    const token = jwt.sign(
+      {
+        id: user._id,
+        email: user.email,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
     res.json({
-        message : "Login Succesfully",
-        token,
-    })
+      message: "Login successful",
+      token,
+    });
 
-
-})
+  } catch (error) {
+    res.status(500).json({
+      message: "Server error",
+    });
+  }
+});
 
 
 export default userRouter;
