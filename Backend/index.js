@@ -1,5 +1,6 @@
 import express from "express"
 import cors from "cors"
+import connectDB from "./config/db";
 
 const app = express();
 
@@ -21,7 +22,7 @@ app.get("/",(req,res)=>{
 
 
 
-
+connectDB();
 
 app.listen(3000,()=>{
     console.log("Server Running on Port 3000")
